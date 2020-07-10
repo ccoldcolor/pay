@@ -4,7 +4,8 @@ namespace coldcolor\pay\wechat\miniprogram;
 
 use coldcolor\pay\wechat\Config;
 
-class Application {
+class Application
+{
 
     private $config;
 

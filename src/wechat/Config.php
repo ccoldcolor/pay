@@ -2,7 +2,8 @@
 
 namespace coldcolor\pay\wechat;
 
-class Config {
+class Config
+{
     
     public $app_id = "";
 

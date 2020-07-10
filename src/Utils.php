@@ -2,7 +2,8 @@
 
 namespace coldcolor\pay;
 
-class Utils {
+class Utils
+{
 
     /**
      * 获取随机32位字符串

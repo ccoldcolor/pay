@@ -4,7 +4,8 @@ namespace coldcolor\pay\wechat;
 
 use Exception;
 
-class App {
+class App
+{
 
     private static $apps = [
 

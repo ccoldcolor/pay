@@ -2,7 +2,8 @@
 
 namespace coldcolor\pay\wechat\payment;
 
-class PaymentRequest {
+class PaymentRequest
+{
 
     protected function request()
     {
