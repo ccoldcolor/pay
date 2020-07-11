@@ -2,8 +2,14 @@
 
 namespace coldcolor\pay\wechat;
 
-use Exception;
+use coldcolor\pay\exceptions\WechatException;
 
+/**
+ * Class App.
+ *
+ * @method static \coldcolor\pay\wechat\miniprogram\Application            miniprogram(array $config)
+ * 
+ */
 class App
 {
 
@@ -18,7 +24,7 @@ class App
      * 初始化并获取配置实例
      *
      * @param array $config
-     * @return Config
+     * @return Config  
      */
     private static function getConfig(array $config) : Config
     {
@@ -42,7 +48,7 @@ class App
 
         }
 
-        throw new Exception("方法 {$name} 不存在！");
+        throw new WechatException("方法 {$name} 不存在！");
     }
 
 }

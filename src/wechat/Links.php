@@ -1,6 +1,6 @@
 <?php
 
-namespace coldcolor\pay\wechat\payment;
+namespace coldcolor\pay\wechat;
 
 class Links
 {
