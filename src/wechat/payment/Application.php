@@ -4,6 +4,7 @@ namespace coldcolor\pay\wechat\payment;
 
 use coldcolor\pay\exceptions\WechatException;
 use coldcolor\pay\wechat\Config;
+use coldcolor\pay\wechat\payment\apis\OrderQuery;
 use coldcolor\pay\wechat\payment\apis\Unifiedorder;
 
 class Application
@@ -74,6 +75,58 @@ class Application
         }
 
         $response = $unifiedorder->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+        
+        return $response;
+    }
+
+    /**
+     * 通过微信订单号查询订单
+     *
+     * @param string $transaction_id
+     * @return array
+     */
+    public function queryOrderByTransactionId(string $transaction_id) : array
+    {
+        //获取实例
+        $orderQuery = new OrderQuery;
+        
+        //设置参数
+        $orderQuery->app_id = $this->config->app_id;
+        $orderQuery->mch_id = $this->config->mch_id;
+        $orderQuery->key = $this->config->key;
+        $orderQuery->transaction_id = $transaction_id;
+
+        $response = $orderQuery->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+        
+        return $response;
+    }
+
+    /**
+     * 通过商户订单号查询订单
+     *
+     * @param string $out_trade_no
+     * @return array
+     */
+    public function queryOrderByOutTradeNo(string $out_trade_no) : array
+    {
+        //获取实例
+        $orderQuery = new OrderQuery;
+        
+        //设置参数
+        $orderQuery->app_id = $this->config->app_id;
+        $orderQuery->mch_id = $this->config->mch_id;
+        $orderQuery->key = $this->config->key;
+        $orderQuery->out_trade_no = $out_trade_no;
+
+        $response = $orderQuery->request();
 
         if ($response["result_code"] !== "SUCCESS") {
             throw new WechatException($response["err_code_des"]);
