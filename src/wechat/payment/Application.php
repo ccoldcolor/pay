@@ -4,7 +4,10 @@ namespace coldcolor\pay\wechat\payment;
 
 use coldcolor\pay\exceptions\WechatException;
 use coldcolor\pay\wechat\Config;
+use coldcolor\pay\wechat\payment\apis\OrderClose;
 use coldcolor\pay\wechat\payment\apis\OrderQuery;
+use coldcolor\pay\wechat\payment\apis\Refund;
+use coldcolor\pay\wechat\payment\apis\RefundQuery;
 use coldcolor\pay\wechat\payment\apis\Unifiedorder;
 
 class Application
@@ -13,7 +16,7 @@ class Application
 
     private function __construct(Config $config)
     {
-         $this->config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -22,7 +25,7 @@ class Application
      * @param Config $config
      * @return Application
      */
-    public static function getPayment(Config $config) : Application
+    public static function getPayment(Config $config): Application
     {
         //检查配置参数
         if (empty($config->mch_id)) {
@@ -37,32 +40,31 @@ class Application
     /**
      * 统一下单
      *
-     * @param string $out_trade_no 商户订单号
-     * @param float $total_fee 订单金额，单位元
+     * @param string $outTradeNo 商户订单号
+     * @param float $totalFee 订单金额，单位元
      * @param string $body 商品描述
-     * @param string $notify_url 回调地址
+     * @param string $notifyUrl 回调地址
      * @param string $openid 用户openid
      * @return array
      */
     public function unifiedorder(
-        string $out_trade_no,
-        float $total_fee,
+        string $outTradeNo,
+        float $totalFee,
         string $body,
-        string $notify_url = "",
+        string $notifyUrl = "",
         string $openid = ""
-    ) : array
-    {
+    ): array {
         //获取实例
         $unifiedorder = new Unifiedorder;
-        
+
         //设置参数
         $unifiedorder->body = $body;
-        $unifiedorder->out_trade_no = $out_trade_no;
-        $unifiedorder->total_fee = intval($total_fee * 100);
+        $unifiedorder->out_trade_no = $outTradeNo;
+        $unifiedorder->total_fee = intval($totalFee * 100);
         $unifiedorder->app_id = $this->config->app_id;
         $unifiedorder->mch_id = $this->config->mch_id;
         $unifiedorder->key = $this->config->key;
-        $unifiedorder->notify_url = $notify_url ?: $this->config->notify_url;
+        $unifiedorder->notify_url = $notifyUrl ?: $this->config->notify_url;
         $unifiedorder->trade_type = $this->getPayType();
 
         //判断支付方式
@@ -79,72 +81,290 @@ class Application
         if ($response["result_code"] !== "SUCCESS") {
             throw new WechatException($response["err_code_des"]);
         }
-        
+
         return $response;
     }
 
     /**
      * 通过微信订单号查询订单
      *
-     * @param string $transaction_id
+     * @param string $transactionId 微信订单号
      * @return array
      */
-    public function queryOrderByTransactionId(string $transaction_id) : array
+    public function queryOrderByTransactionId(string $transactionId): array
     {
         //获取实例
         $orderQuery = new OrderQuery;
-        
+
         //设置参数
         $orderQuery->app_id = $this->config->app_id;
         $orderQuery->mch_id = $this->config->mch_id;
         $orderQuery->key = $this->config->key;
-        $orderQuery->transaction_id = $transaction_id;
+        $orderQuery->transaction_id = $transactionId;
 
         $response = $orderQuery->request();
 
         if ($response["result_code"] !== "SUCCESS") {
             throw new WechatException($response["err_code_des"]);
         }
-        
+
         return $response;
     }
 
     /**
      * 通过商户订单号查询订单
      *
-     * @param string $out_trade_no
+     * @param string $outTradeNo 商户订单号
      * @return array
      */
-    public function queryOrderByOutTradeNo(string $out_trade_no) : array
+    public function queryOrderByOutTradeNo(string $outTradeNo): array
     {
         //获取实例
         $orderQuery = new OrderQuery;
-        
+
         //设置参数
         $orderQuery->app_id = $this->config->app_id;
         $orderQuery->mch_id = $this->config->mch_id;
         $orderQuery->key = $this->config->key;
-        $orderQuery->out_trade_no = $out_trade_no;
+        $orderQuery->out_trade_no = $outTradeNo;
 
         $response = $orderQuery->request();
 
         if ($response["result_code"] !== "SUCCESS") {
             throw new WechatException($response["err_code_des"]);
         }
-        
+
         return $response;
     }
-    
+
+    /**
+     * 订单关闭
+     *
+     * @param string $outTradeNo 商户订单号
+     * @return array
+     */
+    public function closeOrder(string $outTradeNo): array
+    {
+        //获取实例
+        $orderClose = new OrderClose;
+
+        //设置参数
+        $orderClose->app_id = $this->config->app_id;
+        $orderClose->mch_id = $this->config->mch_id;
+        $orderClose->key = $this->config->key;
+        $orderClose->out_trade_no = $outTradeNo;
+
+        $response = $orderClose->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * 通过商户订单号退款
+     *
+     * @param string $outTradeNo 商户订单号
+     * @param string $refundNo 商户退款单号
+     * @param float $totalFee 订单总金额
+     * @param float $refundFee 退款金额
+     * @return array
+     */
+    public function refundByOutTradeNo(
+        string $outTradeNo,
+        string $refundNo,
+        float $totalFee,
+        float $refundFee
+    ): array {
+        //获取实例
+        $refund = new Refund;
+
+        //设置参数
+        $refund->app_id = $this->config->app_id;
+        $refund->mch_id = $this->config->mch_id;
+        $refund->key = $this->config->key;
+        $refund->out_trade_no = $outTradeNo;
+        $refund->cert_path = $this->config->cert_path;
+        $refund->key_path = $this->config->key_path;
+        $refund->total_fee = intval($totalFee * 100);
+        $refund->refund_fee = intval($refundFee * 100);
+        $refund->out_refund_no = $refundNo;
+
+        $response = $refund->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * 通过微信订单号退款
+     *
+     * @param string $transactionId 微信订单号
+     * @param string $refundNo 商户退款单号
+     * @param float $totalFee 订单总金额
+     * @param float $refundFee 退款金额
+     * @return array
+     */
+    public function refundByTransactionId(
+        string $transactionId,
+        string $refundNo,
+        float $totalFee,
+        float $refundFee
+    ): array {
+        //获取实例
+        $refund = new Refund;
+
+        //设置参数
+        $refund->app_id = $this->config->app_id;
+        $refund->mch_id = $this->config->mch_id;
+        $refund->key = $this->config->key;
+        $refund->transaction_id = $transactionId;
+        $refund->cert_path = $this->config->cert_path;
+        $refund->key_path = $this->config->key_path;
+        $refund->total_fee = intval($totalFee * 100);
+        $refund->refund_fee = intval($refundFee * 100);
+        $refund->out_refund_no = $refundNo;
+
+        $response = $refund->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * 通过微信订单号查询退款
+     *
+     * @param string $transactionId 微信订单号
+     * @param integer $offset 偏移量
+     * @return array
+     */
+    public function refundQueryByTransactionId(string $transactionId, int $offset = 0): array
+    {
+        //获取实例
+        $refundQuery = new RefundQuery;
+
+        //设置参数
+        $refundQuery->app_id = $this->config->app_id;
+        $refundQuery->mch_id = $this->config->mch_id;
+        $refundQuery->key = $this->config->key;
+        $refundQuery->transaction_id = $transactionId;
+
+        if ($offset > 0)
+            $refundQuery->offset = $offset;
+
+        $response = $refundQuery->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * 通过商户订单号查询退款
+     *
+     * @param string $outTradeNo 商户订单号
+     * @param integer $offset 偏移量
+     * @return array
+     */
+    public function refundQueryByOutTradeNo(string $outTradeNo, int $offset = 0): array
+    {
+        //获取实例
+        $refundQuery = new RefundQuery;
+
+        //设置参数
+        $refundQuery->app_id = $this->config->app_id;
+        $refundQuery->mch_id = $this->config->mch_id;
+        $refundQuery->key = $this->config->key;
+        $refundQuery->out_trade_no = $outTradeNo;
+
+        if ($offset > 0)
+            $refundQuery->offset = $offset;
+
+        $response = $refundQuery->request();
+
+        return $response;
+    }
+
+    /**
+     * 通过商户退款单号查询退款
+     *
+     * @param string $outRefundNo 商户退款单号
+     * @param integer $offset 偏移量
+     * @return array
+     */
+    public function refundQueryByOutRefundNo(string $outRefundNo, int $offset = 0): array
+    {
+        //获取实例
+        $refundQuery = new RefundQuery;
+
+        //设置参数
+        $refundQuery->app_id = $this->config->app_id;
+        $refundQuery->mch_id = $this->config->mch_id;
+        $refundQuery->key = $this->config->key;
+        $refundQuery->out_refund_no = $outRefundNo;
+
+        if ($offset > 0)
+            $refundQuery->offset = $offset;
+
+        $response = $refundQuery->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * 通过微信退款单号查询退款
+     *
+     * @param string $refundId 微信退款单号
+     * @param integer $offset 偏移量
+     * @return array
+     */
+    public function refundQueryByRefundId(string $refundId, int $offset = 0): array
+    {
+        //获取实例
+        $refundQuery = new RefundQuery;
+
+        //设置参数
+        $refundQuery->app_id = $this->config->app_id;
+        $refundQuery->mch_id = $this->config->mch_id;
+        $refundQuery->key = $this->config->key;
+        $refundQuery->refund_id = $refundId;
+
+        if ($offset > 0)
+            $refundQuery->offset = $offset;
+
+        $response = $refundQuery->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
     /**
      * 获取支付方式
      *
      * @return string
      */
-    private function getPayType() : string
+    private function getPayType(): string
     {
         switch ($this->config->app_type) {
             case "miniprogram":
-            case "wxweb" :
+            case "wxweb":
                 return "JSAPI";
 
             case "openPlatform":

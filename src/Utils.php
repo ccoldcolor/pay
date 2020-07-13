@@ -136,7 +136,14 @@ class Utils
      * @param integer $timeout
      * @return string
      */
-    public static function postCurl(string $data, string $url, $useCert = false, $timeout = 30)
+    public static function postCurl(
+        string $data,
+        string $url,
+        $useCert = false,
+        $certFile = "",
+        $keyFile = "",
+        $timeout = 30
+    )
     {
         $ch = curl_init();
 
@@ -155,9 +162,9 @@ class Utils
             // 设置证书
             // 使用证书：cert 与 key 分别属于两个.pem文件
             curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'PEM');
-            curl_setopt($ch, CURLOPT_SSLCERT, "");
+            curl_setopt($ch, CURLOPT_SSLCERT, $certFile);
             curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'PEM');
-            curl_setopt($ch, CURLOPT_SSLKEY, "");
+            curl_setopt($ch, CURLOPT_SSLKEY, $keyFile);
         }
 
         // post方式提交数据

@@ -2,6 +2,7 @@
 
 namespace coldcolor\pay\wechat\payment\apis;
 
+use coldcolor\pay\Utils;
 use coldcolor\pay\wechat\Links;
 use coldcolor\pay\wechat\payment\PaymentRequest;
 
@@ -24,8 +25,12 @@ class Unifiedorder extends PaymentRequest
 
     public $openid;
 
+    public $spbill_create_ip;
+
     protected function setData()
     {
+        $this->spbill_create_ip = Utils::getClientIP();
+
         if (!empty($this->body))
             $this->data['body'] = $this->body;
 
@@ -43,5 +48,8 @@ class Unifiedorder extends PaymentRequest
 
         if (!empty($this->openid))
             $this->data['openid'] = $this->openid;
+
+        if (!empty($this->spbill_create_ip))
+            $this->data['spbill_create_ip'] = $this->spbill_create_ip;
     }
 }

@@ -13,8 +13,6 @@ class PaymentRequest
 
     protected $nonce_str;
 
-    protected $spbill_create_ip;
-
     protected $sign;
 
     protected $sign_type = "MD5";
@@ -26,6 +24,12 @@ class PaymentRequest
     public $mch_id;
 
     public $key;
+
+    protected $use_cert = false;
+
+    public $cert_path = "";
+
+    public $key_path = "";
 
     /**
      * 获取参数签名
@@ -62,21 +66,24 @@ class PaymentRequest
      */
     public function request() : array
     {
-        $this->spbill_create_ip = Utils::getClientIP();
         $this->nonce_str = Utils::getNonceStr();
 
         $this->data['appid'] = $this->app_id;
         $this->data['mch_id'] = $this->mch_id;
         $this->data['nonce_str'] = $this->nonce_str;
         $this->data['sign_type'] = $this->sign_type;
-        $this->data['spbill_create_ip'] = $this->spbill_create_ip;
         
         $this->setData();
 
         $this->data['sign'] = $this->getSign();
 
         $params = Utils::arrayToXml($this->data);
-        $responseXml = Utils::postCurl($params, $this->url);
+
+        if (true === $this->use_cert)
+            $responseXml = Utils::postCurl($params, $this->url, true, $this->cert_path, $this->key_path);
+        else
+            $responseXml = Utils::postCurl($params, $this->url);
+       
 
         $this->response = Utils::xmlToArray($responseXml);
 
