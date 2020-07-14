@@ -6,10 +6,6 @@ use coldcolor\pay\base\BaseApplication;
 use coldcolor\pay\base\BaseConfig;
 use coldcolor\pay\exceptions\WechatException;
 use coldcolor\pay\wechat\Config;
-use coldcolor\pay\wechat\payment\apis\OrderClose;
-use coldcolor\pay\wechat\payment\apis\OrderQuery;
-use coldcolor\pay\wechat\payment\apis\Refund;
-use coldcolor\pay\wechat\payment\apis\RefundQuery;
 use coldcolor\pay\wechat\payment\apis\Unifiedorder;
 
 class Application extends BaseApplication
@@ -58,7 +54,7 @@ class Application extends BaseApplication
         string $openid = ""
     ): array {
         //获取实例
-        $unifiedorder = new Unifiedorder;
+        $unifiedorder = PaymentFactory::unifiedorder();
 
         //设置参数
         $unifiedorder->body = $body;
@@ -97,7 +93,7 @@ class Application extends BaseApplication
     public function queryOrderByTransactionId(string $transactionId): array
     {
         //获取实例
-        $orderQuery = new OrderQuery;
+        $orderQuery = PaymentFactory::orderQuery();
 
         //设置参数
         $orderQuery->app_id = $this->config->app_id;
@@ -123,7 +119,7 @@ class Application extends BaseApplication
     public function queryOrderByOutTradeNo(string $outTradeNo): array
     {
         //获取实例
-        $orderQuery = new OrderQuery;
+        $orderQuery = PaymentFactory::orderQuery();
 
         //设置参数
         $orderQuery->app_id = $this->config->app_id;
@@ -149,7 +145,7 @@ class Application extends BaseApplication
     public function closeOrder(string $outTradeNo): array
     {
         //获取实例
-        $orderClose = new OrderClose;
+        $orderClose = PaymentFactory::orderClose();
 
         //设置参数
         $orderClose->app_id = $this->config->app_id;
@@ -182,7 +178,7 @@ class Application extends BaseApplication
         float $refundFee
     ): array {
         //获取实例
-        $refund = new Refund;
+        $refund = PaymentFactory::refund();
 
         //设置参数
         $refund->app_id = $this->config->app_id;
@@ -220,7 +216,7 @@ class Application extends BaseApplication
         float $refundFee
     ): array {
         //获取实例
-        $refund = new Refund;
+        $refund = PaymentFactory::refund();
 
         //设置参数
         $refund->app_id = $this->config->app_id;
@@ -252,7 +248,7 @@ class Application extends BaseApplication
     public function refundQueryByTransactionId(string $transactionId, int $offset = 0): array
     {
         //获取实例
-        $refundQuery = new RefundQuery;
+        $refundQuery = PaymentFactory::refundQuery();
 
         //设置参数
         $refundQuery->app_id = $this->config->app_id;
@@ -282,7 +278,7 @@ class Application extends BaseApplication
     public function refundQueryByOutTradeNo(string $outTradeNo, int $offset = 0): array
     {
         //获取实例
-        $refundQuery = new RefundQuery;
+        $refundQuery = PaymentFactory::refundQuery();
 
         //设置参数
         $refundQuery->app_id = $this->config->app_id;
@@ -308,7 +304,7 @@ class Application extends BaseApplication
     public function refundQueryByOutRefundNo(string $outRefundNo, int $offset = 0): array
     {
         //获取实例
-        $refundQuery = new RefundQuery;
+        $refundQuery = PaymentFactory::refundQuery();
 
         //设置参数
         $refundQuery->app_id = $this->config->app_id;
@@ -338,7 +334,7 @@ class Application extends BaseApplication
     public function refundQueryByRefundId(string $refundId, int $offset = 0): array
     {
         //获取实例
-        $refundQuery = new RefundQuery;
+        $refundQuery = PaymentFactory::refundQuery();
 
         //设置参数
         $refundQuery->app_id = $this->config->app_id;
