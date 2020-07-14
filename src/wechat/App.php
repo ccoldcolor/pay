@@ -7,7 +7,7 @@ use coldcolor\pay\exceptions\WechatException;
 /**
  * Class App.
  *
- * @method static \coldcolor\pay\wechat\miniprogram\Application            miniprogram(array $config)
+ * @method static \coldcolor\pay\wechat\miniprogram\Application    miniprogram(array $config)
  * 
  */
 class App
@@ -41,11 +41,8 @@ class App
     public function __callStatic(string $name, array $arguments)
     {
         if (isset(self::$apps[$name])) {
-
             $configInstance = self::getConfig($arguments[0]);
-
-            return new self::$apps[$name]($configInstance);
-
+            return self::$apps[$name]::getInstance($configInstance);
         }
 
         throw new WechatException("方法 {$name} 不存在！");

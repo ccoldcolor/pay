@@ -2,6 +2,8 @@
 
 namespace coldcolor\pay\wechat\payment;
 
+use coldcolor\pay\base\BaseApplication;
+use coldcolor\pay\base\BaseConfig;
 use coldcolor\pay\exceptions\WechatException;
 use coldcolor\pay\wechat\Config;
 use coldcolor\pay\wechat\payment\apis\OrderClose;
@@ -10,31 +12,32 @@ use coldcolor\pay\wechat\payment\apis\Refund;
 use coldcolor\pay\wechat\payment\apis\RefundQuery;
 use coldcolor\pay\wechat\payment\apis\Unifiedorder;
 
-class Application
+class Application extends BaseApplication
 {
-    private $config;
-
-    private function __construct(Config $config)
+    protected function __construct(Config $config)
     {
+        parent::__construct($config);
+
         $this->config = $config;
     }
 
     /**
+     * 重载父类方法
      * 获取微信商户实例
      *
      * @param Config $config
      * @return Application
      */
-    public static function getPayment(Config $config): Application
+    public static function getInstance(BaseConfig $config): BaseApplication
     {
-        //检查配置参数
+        // 检查配置参数
         if (empty($config->mch_id)) {
             throw new WechatException("商户 id 参数不能为空");
         } else if (empty($config->key)) {
             throw new WechatException("商户 key 参数不能为空");
         }
 
-        return new self($config);
+        return parent::getInstance($config);
     }
 
     /**

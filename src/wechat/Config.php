@@ -2,9 +2,10 @@
 
 namespace coldcolor\pay\wechat;
 
-class Config
+use coldcolor\pay\base\BaseConfig;
+
+class Config extends BaseConfig
 {
-    
     public $app_id = "";
 
     public $secret = "";
@@ -21,7 +22,7 @@ class Config
 
     public $key_path = "";
 
-    private function __construct(array $config)
+    protected function __construct(array $config)
     {
         $this->app_id = $config['app_id'] ?? "";
         $this->secret = $config['secret'] ?? "";
@@ -31,10 +32,4 @@ class Config
         $this->cert_path = $config['cert_path'] ?? "";
         $this->key_path = $config['key_path'] ?? "";
     }
-
-    public static function init(array $config = [])
-    {
-        return new self($config);
-    }
-
 }

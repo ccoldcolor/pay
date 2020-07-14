@@ -2,17 +2,16 @@
 
 namespace coldcolor\pay\wechat\miniprogram;
 
+use coldcolor\pay\base\BaseApplication;
 use coldcolor\pay\wechat\Config;
 use coldcolor\pay\wechat\payment\Application as PaymentApplication;
 
-class Application
+class Application extends BaseApplication
 {
-
-    private $config;
-
-    public function __construct(Config $config)
+    protected function __construct(Config $config)
     {
-        $this->config = $config;
+        parent::__construct($config);
+
         $this->config->app_type = "miniprogram";
     }
 
@@ -23,7 +22,6 @@ class Application
      */
     public function payment() : PaymentApplication
     {
-        return PaymentApplication::getPayment($this->config);
+        return PaymentApplication::getInstance($this->config);
     }
-
 }
