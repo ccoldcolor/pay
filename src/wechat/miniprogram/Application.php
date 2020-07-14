@@ -8,6 +8,11 @@ use coldcolor\pay\wechat\payment\Application as PaymentApplication;
 
 class Application extends BaseApplication
 {
+    /**
+     * @var PaymentApplication
+     */
+    private $payment;
+
     protected function __construct(Config $config)
     {
         parent::__construct($config);
@@ -22,6 +27,10 @@ class Application extends BaseApplication
      */
     public function payment() : PaymentApplication
     {
-        return PaymentApplication::getInstance($this->config);
+        if (empty($this->payment)) {
+            $this->payment = PaymentApplication::getInstance($this->config);
+        }
+
+        return $this->payment;
     }
 }

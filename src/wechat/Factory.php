@@ -5,19 +5,18 @@ namespace coldcolor\pay\wechat;
 use coldcolor\pay\exceptions\WechatException;
 
 /**
- * Class App.
+ * Wechat app factory.
  *
  * @method static \coldcolor\pay\wechat\miniprogram\Application    miniprogram(array $config)
  * 
  */
-class App
+class Factory
 {
+    private static $instances = [];
 
     private static $apps = [
-
         //小程序实例
         'miniprogram' => miniprogram\Application::class,
-
     ];
 
     /**
@@ -40,12 +39,14 @@ class App
      */
     public function __callStatic(string $name, array $arguments)
     {
-        if (isset(self::$apps[$name])) {
+        if (!isset(self::$apps[$name]))
+            throw new WechatException("方法 {$name} 不存在！");
+
+        if (empty(self::$instances[$name])) {
             $configInstance = self::getConfig($arguments[0]);
-            return self::$apps[$name]::getInstance($configInstance);
+            self::$instances[$name] = self::$apps[$name]::getInstance($configInstance);
         }
 
-        throw new WechatException("方法 {$name} 不存在！");
+        return self::$instances[$name];
     }
-
 }

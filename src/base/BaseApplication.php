@@ -5,11 +5,6 @@ namespace coldcolor\pay\base;
 class BaseApplication
 {
     /**
-     * @var array
-     */
-    protected static $instances = [];
-
-    /**
      * @var BaseConfig
      */
     protected $config;
@@ -28,11 +23,6 @@ class BaseApplication
      */
     public static function getInstance(BaseConfig $config): BaseApplication
     {
-        if (empty(self::$instances[static::class])) {
-            var_dump(self::$instances);
-            self::$instances[static::class] = new static($config);
-        }
-
-        return self::$instances[static::class];
+        return new static($config);
     }
 }
