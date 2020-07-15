@@ -6,7 +6,6 @@ use coldcolor\pay\base\BaseApplication;
 use coldcolor\pay\base\BaseConfig;
 use coldcolor\pay\exceptions\WechatException;
 use coldcolor\pay\wechat\Config;
-use coldcolor\pay\wechat\payment\apis\Unifiedorder;
 
 class Application extends BaseApplication
 {

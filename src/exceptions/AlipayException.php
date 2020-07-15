@@ -2,7 +2,7 @@
 
 namespace coldcolor\pay\exceptions;
 
-class AlibabaException extends Exception
+class AlipayException extends Exception
 {
     
 }

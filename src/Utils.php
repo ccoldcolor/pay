@@ -173,7 +173,6 @@ class Utils
 
         // 运行curl
         $result = curl_exec($ch);
-
         // 返回结果
         if ($result) {
             curl_close($ch);
@@ -204,5 +203,23 @@ class Utils
         curl_close($ch);
 
         return $result;
+    }
+
+    /**
+     * 检查值是否为空
+     *
+     * @param [type] $value
+     * @return void
+     */
+    public static function checkEmpty($value)
+    {
+        if (!isset($value))
+            return true;
+        if ($value === null)
+            return true;
+        if (trim($value) === "")
+            return true;
+
+        return false;
     }
 }
