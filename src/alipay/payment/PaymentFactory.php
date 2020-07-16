@@ -5,20 +5,33 @@ namespace coldcolor\pay\alipay\payment;
 use coldcolor\pay\exceptions\AlipayException;
 
 /**
- * 微信支付工厂
+ * 阿里支付工厂
  *
- * @method static \coldcolor\pay\alipay\payment\apis\TradeAppPay    tradeAppPay()
- * @method static \coldcolor\pay\alipay\payment\apis\TradeQuery     tradeQuery()
- * @method static \coldcolor\pay\alipay\payment\apis\tradeCreate    tradeCreate()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeAppPay         tradeAppPay()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeQuery          tradeQuery()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeCreate         tradeCreate()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeWapPay         tradeWapPay()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradePagePay        tradePagePay()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeCancel         tradeCancel()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeClose          tradeClose()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeRefund         tradeRefund()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradePageRefund     tradePageRefund()
+ * @method static \coldcolor\pay\alipay\payment\apis\TradeRefundQuery    tradeRefundQuery()
  * 
  */
 class PaymentFactory
 {
     private static $apps = [
-        // 统一下单
         "tradeAppPay" => apis\TradeAppPay::class,
         "tradeQuery" => apis\TradeQuery::class,
         "tradeCreate" => apis\TradeCreate::class,
+        "tradeWapPay" => apis\TradeWapPay::class,
+        "tradePagePay" => apis\TradePagePay::class,
+        "tradeCancel" => apis\TradeCancel::class,
+        "tradeClose" => apis\TradeClose::class,
+        "tradeRefund" => apis\TradeRefund::class,
+        "tradePageRefund" => apis\TradePageRefund::class,
+        "tradeRefundQuery" => apis\TradeRefundQuery::class,
     ];
 
     public function __callStatic(string $name, array $arguments)

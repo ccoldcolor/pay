@@ -74,7 +74,7 @@ class PaymentRequest
         $this->data['timestamp'] = date("Y-m-d H:i:s", time() + 3600 * 8);
         $this->data['version'] = $this->version;
 
-        if ($this->request_type === RequestMethod::SDK_REQUEST) {
+        if ($this->request_type !== RequestMethod::NORMAL_REQUEST) {
             $this->data['alipay_sdk'] = $this->sdk_version;
         }
 
@@ -94,7 +94,8 @@ class PaymentRequest
                 break;
 
             case RequestMethod::PAGE_REQUEST:
-
+                $res = $this->pageExecute();
+                break;
 
             default:
                 $res = null;
@@ -105,20 +106,6 @@ class PaymentRequest
         }
 
         return $res;
-    }
-
-    /**
-     * 验证返回值
-     *
-     * @return boolean
-     */
-    private function validateResponse(): bool
-    {
-        if ($this->response["return_code"] !== "SUCCESS") {
-            throw new AlipayException($this->response["return_msg"]);
-        }
-
-        return true;
     }
 
     private function getRequestUrl()
@@ -192,7 +179,20 @@ class PaymentRequest
 
     private function pageExecute()
     {
+        $sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='" . $this->gateway . "?charset=" . trim($this->charset) . "' method='POST'>";
 
+        foreach ($this->data as $key => $val) {
+            if (false === Utils::checkEmpty($val)) {
+                $val = str_replace("'", "&apos;", $val);
+                $sHtml .= "<input type='hidden' name='" . $key . "' value='" . $val . "'/>";
+            }
+        }
+
+        //submit按钮控件请不要含有name属性
+        $sHtml = $sHtml . "<input type='submit' value='ok' style='display:none;''></form>";
+        $sHtml = $sHtml . "<script>document.forms['alipaysubmit'].submit();</script>";
+
+        return ["buildstr" => $sHtml];
     }
 
     private function execute()
