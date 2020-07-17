@@ -18,4 +18,7 @@ class Links
 
     //查询退款
     const REFUND_QUERY = "https://api.mch.weixin.qq.com/pay/refundquery";
+
+    //获取 Access Token
+    const GET_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 }

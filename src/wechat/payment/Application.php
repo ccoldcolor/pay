@@ -12,8 +12,6 @@ class Application extends BaseApplication
     protected function __construct(Config $config)
     {
         parent::__construct($config);
-
-        $this->config = $config;
     }
 
     /**
