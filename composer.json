@@ -1,6 +1,6 @@
 {
     "name": "coldcolor/pay",
-    "description": "wechat and alibaba pay",
+    "description": "简单的微信支付宝支付组件扩展",
     "type": "library",
     "require": {
         "php": ">=7.1.3",
