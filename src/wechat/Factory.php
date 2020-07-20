@@ -8,7 +8,8 @@ use coldcolor\pay\exceptions\WechatException;
  * Wechat app factory.
  *
  * @method static \coldcolor\pay\wechat\miniprogram\Application    miniprogram(array $config)
- * 
+ * @method static \coldcolor\pay\wechat\accessToken\Application    accessToken(array $config)
+ *
  */
 class Factory
 {
@@ -17,6 +18,8 @@ class Factory
     private static $apps = [
         //小程序实例
         'miniprogram' => miniprogram\Application::class,
+        //at 实例
+        'accessToken' => accessToken\Application::class,
     ];
 
     /**
