@@ -12,7 +12,8 @@ use coldcolor\pay\exceptions\WechatException;
  * @method static \coldcolor\pay\wechat\payment\apis\OrderClose      orderClose()
  * @method static \coldcolor\pay\wechat\payment\apis\Refund          refund()
  * @method static \coldcolor\pay\wechat\payment\apis\RefundQuery     refundQuery()
- * 
+ * @method static \coldcolor\pay\wechat\payment\apis\MicroPay        microPay()
+ *
  */
 class PaymentFactory
 {
@@ -27,6 +28,8 @@ class PaymentFactory
         "refund" => apis\Refund::class,
         // 查询退款
         "refundQuery" => apis\RefundQuery::class,
+        // 正扫支付
+        "microPay" => apis\MicroPay::class,
     ];
 
     public function __callStatic(string $name, array $arguments)

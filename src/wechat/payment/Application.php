@@ -82,6 +82,43 @@ class Application extends BaseApplication
     }
 
     /**
+     * 微信正扫
+     *
+     * @param string $outTradeNo 商户订单号
+     * @param float $totalFee 订单金额
+     * @param string $body 商品说明
+     * @param string $authCode 用户条码
+     * @return array
+     * @throws WechatException
+     */
+    public function microPay(
+        string $outTradeNo,
+        float $totalFee,
+        string $body,
+        string $authCode
+    ): array {
+        //获取实例
+        $microPay = PaymentFactory::microPay();
+
+        //设置参数
+        $microPay->body = $body;
+        $microPay->out_trade_no = $outTradeNo;
+        $microPay->total_fee = intval($totalFee * 100);
+        $microPay->app_id = $this->config->app_id;
+        $microPay->mch_id = $this->config->mch_id;
+        $microPay->key = $this->config->key;
+        $microPay->auth_code = $authCode;
+
+        $response = $microPay->request();
+
+        if ($response["result_code"] !== "SUCCESS") {
+            throw new WechatException($response["err_code_des"]);
+        }
+
+        return $response;
+    }
+
+    /**
      * 通过微信订单号查询订单
      *
      * @param string $transactionId 微信订单号
