@@ -41,6 +41,7 @@ class Application extends BaseApplication
      * @param string $body 商品描述
      * @param string $notifyUrl 回调地址
      * @param string $openid 用户openid
+     * @param string $productId 商品信息，pcweb必传
      * @return array
      */
     public function unifiedorder(
@@ -48,7 +49,8 @@ class Application extends BaseApplication
         float $totalFee,
         string $body,
         string $notifyUrl = "",
-        string $openid = ""
+        string $openid = "",
+        string $productId = ""
     ): array {
         //获取实例
         $unifiedorder = PaymentFactory::unifiedorder();
@@ -68,8 +70,13 @@ class Application extends BaseApplication
             if (empty($openid)) {
                 throw new WechatException("openid 不能为空");
             }
-
             $unifiedorder->openid = $openid;
+
+        } else if ($unifiedorder->trade_type === "NATIVE") {
+            if (empty($productId)) {
+                throw new WechatException("productId 不能为空");
+            }
+            $unifiedorder->product_id = $productId;
         }
 
         $response = $unifiedorder->request();
@@ -402,6 +409,12 @@ class Application extends BaseApplication
 
             case "openPlatform":
                 return "APP";
+
+            case "pcweb":
+                return "NATIVE";
+
+            case "mweb":
+                return "MWEB";
 
             default:
                 throw new WechatException("错误的支付方式");

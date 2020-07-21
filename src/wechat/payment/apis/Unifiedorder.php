@@ -27,6 +27,8 @@ class Unifiedorder extends PaymentRequest
 
     public $spbill_create_ip;
 
+    public $product_id;
+
     protected function setData()
     {
         $this->spbill_create_ip = Utils::getClientIP();
@@ -51,5 +53,8 @@ class Unifiedorder extends PaymentRequest
 
         if (!empty($this->spbill_create_ip))
             $this->data['spbill_create_ip'] = $this->spbill_create_ip;
+
+        if (!empty($this->product_id))
+            $this->data['product_id'] = $this->product_id;
     }
 }
