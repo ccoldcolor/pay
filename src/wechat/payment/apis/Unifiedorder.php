@@ -4,12 +4,12 @@ namespace coldcolor\pay\wechat\payment\apis;
 
 use coldcolor\pay\Utils;
 use coldcolor\pay\wechat\Links;
-use coldcolor\pay\wechat\payment\PaymentRequest;
+use coldcolor\pay\wechat\payment\CompanyRequest;
 
 /**
  * 微信统一下单
  */
-class Unifiedorder extends PaymentRequest
+class Unifiedorder extends CompanyRequest
 {
     protected $url = Links::CREATE_ORDER;
 

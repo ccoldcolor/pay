@@ -3,12 +3,12 @@
 namespace coldcolor\pay\wechat\payment\apis;
 
 use coldcolor\pay\wechat\Links;
-use coldcolor\pay\wechat\payment\PaymentRequest;
+use coldcolor\pay\wechat\payment\CompanyRequest;
 
 /**
  * 微信订单查询
  */
-class OrderQuery extends PaymentRequest
+class OrderQuery extends CompanyRequest
 {
     protected $url = Links::ORDER_QUERY;
 

@@ -4,14 +4,14 @@ namespace coldcolor\pay\wechat\payment\apis;
 
 use coldcolor\pay\Utils;
 use coldcolor\pay\wechat\Links;
-use coldcolor\pay\wechat\payment\PaymentRequest;
+use coldcolor\pay\wechat\payment\CompanyRequest;
 
 /**
  * 微信正扫支付
  * Class MicroPay
  * @package coldcolor\pay\wechat\payment\apis
  */
-class MicroPay extends PaymentRequest
+class MicroPay extends CompanyRequest
 {
     protected $url = Links::MICRO_PAY;
 
