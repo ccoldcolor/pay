@@ -3,12 +3,12 @@
 namespace coldcolor\pay\wechat\payment\apis;
 
 use coldcolor\pay\wechat\Links;
-use coldcolor\pay\wechat\payment\CompanyRequest;
+use coldcolor\pay\wechat\payment\PaymentRequest;
 
 /**
  * 微信订单退款
  */
-class Refund extends CompanyRequest
+class Refund extends PaymentRequest
 {
     protected $url = Links::REFUND_ORDER;
 

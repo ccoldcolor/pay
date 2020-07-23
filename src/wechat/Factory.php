@@ -9,6 +9,9 @@ use coldcolor\pay\exceptions\WechatException;
  *
  * @method static \coldcolor\pay\wechat\miniprogram\Application    miniprogram(array $config)
  * @method static \coldcolor\pay\wechat\accessToken\Application    accessToken(array $config)
+ * @method static \coldcolor\pay\wechat\pcweb\Application          pcweb(array $config)
+ * @method static \coldcolor\pay\wechat\mweb\Application           mweb(array $config)
+ * @method static \coldcolor\pay\wechat\wxweb\Application          wxweb(array $config)
  *
  */
 class Factory
@@ -20,6 +23,12 @@ class Factory
         'miniprogram' => miniprogram\Application::class,
         //at 实例
         'accessToken' => accessToken\Application::class,
+        //pc端web实例
+        'pcweb' => pcweb\Application::class,
+        //移动web实例
+        'mweb' => mweb\Application::class,
+        //微信内置网页实例
+        'wxweb' => wxweb\Application::class,
     ];
 
     /**
