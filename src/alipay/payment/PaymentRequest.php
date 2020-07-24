@@ -8,7 +8,7 @@ use coldcolor\pay\Utils;
 
 class PaymentRequest
 {
-    protected $gateway = "https://openapi.alipaydev.com/gateway.do";
+    protected $gateway = "https://openapi.alipay.com/gateway.do";
 
     protected $data = [];
 
