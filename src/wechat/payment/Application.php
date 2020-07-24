@@ -410,7 +410,11 @@ class Application extends BaseApplication
         }
 
         $param = Utils::xmlToArray($param);
+
         $payCallback = PaymentFactory::payCallback($param);
+        $payCallback->key = $this->config->key;
+
+        $payCallback->checkSign();
 
         $res = $callback($payCallback->getData(), $payCallback->isSuccess());
 

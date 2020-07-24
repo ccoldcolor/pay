@@ -19,10 +19,15 @@ class PayCallback extends PaymentRequest
     {
         $this->data = $data;
         $this->sign_type = $data['sign_type'] ?? 'MD5';
+    }
 
+    public function checkSign()
+    {
         if ($this->getSign() !== $this->data['sign']) {
             throw new WechatException('签名验证失败');
         }
+
+        return true;
     }
 
     /**
@@ -31,7 +36,7 @@ class PayCallback extends PaymentRequest
      */
     public function isSuccess(): bool
     {
-        if (!empty($this->data['result_code']) || $this->data['result_code'] !== 'SUCCESS') {
+        if (empty($this->data['result_code']) || $this->data['result_code'] !== 'SUCCESS') {
             return false;
         }
 
