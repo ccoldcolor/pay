@@ -17,7 +17,8 @@ use coldcolor\pay\exceptions\AlipayException;
  * @method static \coldcolor\pay\alipay\payment\apis\TradeRefund         tradeRefund()
  * @method static \coldcolor\pay\alipay\payment\apis\TradePageRefund     tradePageRefund()
  * @method static \coldcolor\pay\alipay\payment\apis\TradeRefundQuery    tradeRefundQuery()
- * 
+ * @method static \coldcolor\pay\alipay\payment\apis\payCallback         PayCallback(array $data)
+ *
  */
 class PaymentFactory
 {
@@ -32,6 +33,7 @@ class PaymentFactory
         "tradeRefund" => apis\TradeRefund::class,
         "tradePageRefund" => apis\TradePageRefund::class,
         "tradeRefundQuery" => apis\TradeRefundQuery::class,
+        "payCallback" => apis\PayCallback::class,
     ];
 
     public static function __callStatic(string $name, array $arguments)
@@ -39,6 +41,6 @@ class PaymentFactory
         if (!isset(self::$apps[$name]))
             throw new AlipayException("方法 {$name} 不存在！");
 
-        return new self::$apps[$name];
+        return new self::$apps[$name](...$arguments);
     }
 }

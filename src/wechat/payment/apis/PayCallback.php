@@ -69,7 +69,7 @@ class PayCallback extends PaymentRequest
      * @param string $reason
      * @return string
      */
-    public function returnFail(string $reason = ''): string
+    public function returnFail($reason = ''): string
     {
         $this->return_data['return_code'] = 'FAIL';
         $this->return_data['return_msg'] = $reason;

@@ -456,4 +456,30 @@ class Application extends BaseApplication
 
         return $response;
     }
+
+    /**
+     * 支付宝支付回调
+     *
+     * @param \Closure $callback
+     * @throws AlipayException
+     */
+    public function payNotify(\Closure $callback)
+    {
+        $param = $_POST;
+
+        if (!$param) {
+            throw new AlipayException("没有找到回调数据");
+        }
+
+        $payCallback = PaymentFactory::payCallback($param);
+        $payCallback->checkSign();
+
+        $res = $callback($payCallback->getData(), $payCallback->isSuccess());
+
+        if ($res === true) {
+            exit($payCallback->returnSuccess());
+        }
+
+        exit($payCallback->returnFail($res));
+    }
 }
