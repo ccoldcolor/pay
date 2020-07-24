@@ -13,6 +13,7 @@ use coldcolor\pay\exceptions\WechatException;
  * @method static \coldcolor\pay\wechat\payment\apis\Refund          refund()
  * @method static \coldcolor\pay\wechat\payment\apis\RefundQuery     refundQuery()
  * @method static \coldcolor\pay\wechat\payment\apis\MicroPay        microPay()
+ * @method static \coldcolor\pay\wechat\payment\apis\PayCallback     payCallback(array $data)
  *
  */
 class PaymentFactory
@@ -30,6 +31,8 @@ class PaymentFactory
         "refundQuery" => apis\RefundQuery::class,
         // 正扫支付
         "microPay" => apis\MicroPay::class,
+        // 支付回调
+        "payCallback" => apis\PayCallback::class,
     ];
 
     public static function __callStatic(string $name, array $arguments)
@@ -37,6 +40,6 @@ class PaymentFactory
         if (!isset(self::$apps[$name]))
             throw new WechatException("方法 {$name} 不存在！");
 
-        return new self::$apps[$name];
+        return new self::$apps[$name](...$arguments);
     }
 }

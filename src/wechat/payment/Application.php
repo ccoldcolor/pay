@@ -5,6 +5,7 @@ namespace coldcolor\pay\wechat\payment;
 use coldcolor\pay\base\BaseApplication;
 use coldcolor\pay\base\BaseConfig;
 use coldcolor\pay\exceptions\WechatException;
+use coldcolor\pay\Utils;
 use coldcolor\pay\wechat\Config;
 
 class Application extends BaseApplication
@@ -393,6 +394,31 @@ class Application extends BaseApplication
         }
 
         return $response;
+    }
+
+    /**
+     * 微信支付完成回调
+     *
+     * @param \Closure $callback
+     * @throws WechatException
+     */
+    public function payNotify(\Closure $callback)
+    {
+        $param = file_get_contents("php://input");
+        if (!$param) {
+            throw new WechatException("没有找到回调数据");
+        }
+
+        $param = Utils::xmlToArray($param);
+        $payCallback = PaymentFactory::payCallback($param);
+
+        $res = $callback($payCallback->getData(), $payCallback->isSuccess());
+
+        if ($res === true) {
+            exit($payCallback->returnSuccess());
+        }
+
+        exit($payCallback->returnFail($res));
     }
 
     /**

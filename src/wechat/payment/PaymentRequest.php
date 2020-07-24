@@ -36,17 +36,23 @@ class PaymentRequest
      *
      * @return string
      */
-    private function getSign() : string
+    protected function getSign() : string
     {
+        $data = $this->data;
+        if (isset($data['sign'])) unset($data['sign']);
+
         // 签名步骤一：按字典排序参数
-        ksort($this->data);
-        $string = Utils::toUrlParams($this->data);
+        ksort($data);
+        $string = Utils::toUrlParams($data);
 
         // 签名步骤二：在string后加入key
         $string = $string . '&key=' . $this->key;
 
-        // 签名步骤三：MD5加密
-        $string = md5($string);
+        // 签名步骤三：加密
+        if (strtolower($this->sign_type) === 'md5')
+            $string = md5($string);
+        else
+            $string = hash_hmac("sha256", $string, $this->key, false);
         
         // 签名步骤四：所有字符转为大写
         $result = strtoupper($string);
