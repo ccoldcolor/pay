@@ -18,5 +18,5 @@
             "coldcolor\\pay\\": "src"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
