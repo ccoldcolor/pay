@@ -34,7 +34,7 @@ class PaymentFactory
         "tradeRefundQuery" => apis\TradeRefundQuery::class,
     ];
 
-    public function __callStatic(string $name, array $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
         if (!isset(self::$apps[$name]))
             throw new AlipayException("方法 {$name} 不存在！");

@@ -32,7 +32,7 @@ class PaymentFactory
         "microPay" => apis\MicroPay::class,
     ];
 
-    public function __callStatic(string $name, array $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
         if (!isset(self::$apps[$name]))
             throw new WechatException("方法 {$name} 不存在！");
