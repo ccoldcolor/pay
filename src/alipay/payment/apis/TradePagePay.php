@@ -40,13 +40,13 @@ class TradePagePay extends PaymentRequest
         if (!empty($this->quit_url))
             $this->biz_data['quit_url'] = $this->quit_url;
 
+        if (!empty($this->product_code))
+            $this->biz_data['product_code'] = $this->product_code;
+
         if (!empty($this->notify_url))
             $this->data['notify_url'] = $this->notify_url;
 
         if (!empty($this->return_url))
             $this->data['return_url'] = $this->return_url;
-
-        if (!empty($this->product_code))
-            $this->data['product_code'] = $this->product_code;
     }
 }
