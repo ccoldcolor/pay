@@ -24,6 +24,8 @@ class TradePagePay extends PaymentRequest
 
     public $subject;
 
+    private $product_code = "FAST_INSTANT_TRADE_PAY";
+
     protected function setData()
     {
         if (!empty($this->subject))
@@ -43,5 +45,8 @@ class TradePagePay extends PaymentRequest
 
         if (!empty($this->return_url))
             $this->data['return_url'] = $this->return_url;
+
+        if (!empty($this->product_code))
+            $this->data['product_code'] = $this->product_code;
     }
 }
