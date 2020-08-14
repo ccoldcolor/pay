@@ -12,6 +12,7 @@ use coldcolor\pay\exceptions\WechatException;
  * @method static \coldcolor\pay\wechat\pcweb\Application          pcweb(array $config)
  * @method static \coldcolor\pay\wechat\mweb\Application           mweb(array $config)
  * @method static \coldcolor\pay\wechat\wxweb\Application          wxweb(array $config)
+ * @method static \coldcolor\pay\wechat\company\Application        company(array $config)
  *
  */
 class Factory
@@ -29,6 +30,8 @@ class Factory
         'mweb' => mweb\Application::class,
         //微信内置网页实例
         'wxweb' => wxweb\Application::class,
+        //企业付款实例
+        'company' => company\Application::class,
     ];
 
     /**
