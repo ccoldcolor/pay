@@ -60,10 +60,12 @@ class Application extends BaseApplication
         $transfers->mch_id = $this->config->mch_id;
         $transfers->key = $this->config->key;
         $transfers->openid = $openid;
-        $transfers->amount = $amount;
+        $transfers->amount = intval($amount * 100);
         $transfers->partner_trade_no = $partnerTradeNo;
         $transfers->openid = $openid;
         $transfers->desc = $desc;
+        $transfers->cert_path = $this->config->cert_path;
+        $transfers->key_path = $this->config->key_path;
 
         foreach ($params as $k => $v) {
             if (isset($transfers->$k))
