@@ -74,9 +74,9 @@ class Application extends BaseApplication
 
         $response = $transfers->request();
 
-        if ($response["result_code"] !== "SUCCESS") {
-            throw new WechatException($response["err_code_des"]);
-        }
+//        if ($response["result_code"] !== "SUCCESS") {
+//            throw new WechatException($response["err_code_des"]);
+//        }
 
         return $response;
     }
